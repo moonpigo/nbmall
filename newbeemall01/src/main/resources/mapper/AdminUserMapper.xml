@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.nbmall.newbeemall.dao.AdminUserMapper">
+
+    <resultMap id="BaseResultMap" type="com.nbmall.newbeemall.entity.AdminUser">
+        <id column="admin_user_id" jdbcType="INTEGER" property="adminUserId"/>
+        <result column="login_user_name" jdbcType="VARCHAR" property="adminUserName"/>
+        <result column="login_password" jdbcType="VARCHAR" property="adminPassword"/>
+        <result column="nick_name" jdbcType="VARCHAR" property="nickName"/>
+        <result column="locked" jdbcType="TINYINT" property="locked"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    admin_user_id, login_user_name, login_password, nick_name, locked
+    </sql>
+
+    <select id="login" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_admin_user
+        where login_user_name = #{userName,jdbcType=VARCHAR} AND login_password=#{password,jdbcType=VARCHAR} AND locked
+        = 0
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from tb_newbee_mall_admin_user
+        where admin_user_id = #{loginUserId,jdbcType=INTEGER}
+    </select>
+
+
+
+    <update id="updateByPrimaryKeySelective" parameterType="com.nbmall.newbeemall.entity.AdminUser">
+          UPDATE tb_newbee_mall_admin_user
+          <set>
+            <if test="adminUserName != null">
+                login_user_name = #{adminUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="adminPassword != null">
+                login_password = #{adminPassword,jdbcType=VARCHAR},
+            </if>
+            <if test="nickName != null">
+                nick_name = #{nickName,jdbcType=VARCHAR},
+            </if>
+            <if test="locked != null">
+                locked = #{locked,jdbcType=TINYINT},
+            </if>
+          </set>
+          WHERE  admin_user_id =  #{adminUserId,jdbcType=INTEGER}
+    </update>
+
+
+
+</mapper>
